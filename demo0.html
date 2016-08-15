@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>扑克牌</title>
+	<link rel="stylesheet" type="text/css" href="http://static.xinhuaapp.com/css/base.css">
+	<style type="text/css">
+		.card{
+			position: relative;
+			margin: 20px;
+			float: left;
+			width: 108px;
+			height: 180px;
+			padding: 20px 30px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+		}
+		.number{
+			position: absolute;
+			text-align: center;
+			color: #f00;
+			padding: 6px;
+			font-size: 28px;
+			font-family: Bodoni;
+		}
+		.ten{
+			letter-spacing: -5px;
+			text-indent: -9px;
+		}
+		.number span{
+			display: block;
+			margin: auto;
+			width: 18px;
+			height: 18px;
+			background: url(h.png) no-repeat;
+			background-size: 100% auto;
+		}
+		.leftNum{
+			top: 0;
+			left: 0;
+		}
+		.rigthNum{
+			bottom: 0;
+			right: 0;
+			-webkit-transform:rotate(180deg);
+			transform: rotate(180deg);
+		}
+		.heart{
+			position: absolute;
+			width: 36px;
+			height: 36px;
+			background: url(h.png) no-repeat;
+		}
+		.rotate{
+			-webkit-transform:rotate(180deg);
+			transform: rotate(180deg);
+		}
+	</style>
+</head>
+<body>
+<div class="card">
+	<div class="heart"></div>
+</div>
+</body>
+<script type="text/javascript" src="http://static.xinhuaapp.com/js/jquery-1.11.0-min.js"></script>
+<script type="text/javascript">
+//设置坐标
+var hXY={};
+var hX=[0,1,2];
+var hY=[[0,1.33,2,2.66,4],[0,0.66,1,2,3,3.33,4],[0,1.33,2,2.66,4]];
+var hWidth=$('.heart').width();
+var hHeight=$('.heart').height();
+var hHalf=2.5*hHeight;
+$('.card').remove();
+$.each(hX,function(xIndex,xItem){
+	$.each(hY[xIndex],function(yIndex,yItem){
+		hXY['x'+xIndex+'y'+yIndex]=[xItem*hWidth,yItem*hHeight];
+	});
+});
+var cardXY=[{
+	"n":2,
+	"list":["x1y0","x1y6"]
+},{
+	"n":3,
+	"list":["x1y0","x1y3","x1y6"]
+},{
+	"n":4,
+	"list":["x0y0","x0y4","x2y0","x2y4"]
+},{
+	"n":5,
+	"list":["x0y0","x0y4","x1y3","x2y0","x2y4"]
+},{
+	"n":6,
+	"list":["x0y0","x0y2","x0y4","x2y0","x2y2","x2y4"]
+},{
+	"n":7,
+	"list":["x0y0","x0y2","x0y4","x1y4","x2y0","x2y2","x2y4"]
+},{
+	"n":8,
+	"list":["x0y0","x0y2","x0y4","x1y2","x1y4","x2y0","x2y2","x2y4"]
+},{
+	"n":9,
+	"list":["x0y0","x0y1","x0y3","x0y4","x1y3","x2y0","x2y1","x2y3","x2y4"]
+},{
+	"n":10,
+	"list":["x0y0","x0y1","x0y3","x0y4","x1y1","x1y5","x2y0","x2y1","x2y3","x2y4"]
+}];
+//绘制图形
+function draw(xy){
+	var iXY=hXY[xy],
+	iObj=$('<span class="heart"></span>');
+	iObj.css({
+		'margin-top':iXY[1],
+		'margin-left':iXY[0]
+	});
+	if (iXY[1]>hHalf) iObj.addClass('rotate');
+	return iObj;
+}
+//循环要画的扑克牌
+$.each(cardXY,function(){
+	var cardObj=$('<div class="card"></div>');
+	cardObj.append('<div class="number leftNum">'+this['n']+'<span></span></div>');
+	cardObj.append('<div class="number rigthNum">'+this['n']+'<span></span></div>');
+	if (this['n']=='10') {cardObj.find('.number').addClass('ten')};
+	$.each(this['list'],function(){
+		cardObj.append(draw(this));
+	});
+	$('body').append(cardObj);
+});
+</script>
+</html>
